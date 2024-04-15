@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.WebAPI", "OrderManagement.WebAPI\OrderManagement.WebAPI.csproj", "{C185A062-3F1F-4D0B-A942-EE3284E51126}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B8A9EC87-57FE-4750-9D10-6E923374C486}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{072B861F-3672-4273-B8CB-D98F09436473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Core", "OrderManagement.Core\OrderManagement.Core.csproj", "{8282DD38-1E30-4D5D-BC01-155DE8AE0B39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagement.Infrastructure", "OrderManagement.Infrastructure\OrderManagement.Infrastructure.csproj", "{61C4022F-E4BE-4E91-9F46-28EF3DCB1FC1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C185A062-3F1F-4D0B-A942-EE3284E51126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C185A062-3F1F-4D0B-A942-EE3284E51126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C185A062-3F1F-4D0B-A942-EE3284E51126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C185A062-3F1F-4D0B-A942-EE3284E51126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8282DD38-1E30-4D5D-BC01-155DE8AE0B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8282DD38-1E30-4D5D-BC01-155DE8AE0B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8282DD38-1E30-4D5D-BC01-155DE8AE0B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8282DD38-1E30-4D5D-BC01-155DE8AE0B39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61C4022F-E4BE-4E91-9F46-28EF3DCB1FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61C4022F-E4BE-4E91-9F46-28EF3DCB1FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61C4022F-E4BE-4E91-9F46-28EF3DCB1FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61C4022F-E4BE-4E91-9F46-28EF3DCB1FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C185A062-3F1F-4D0B-A942-EE3284E51126} = {B8A9EC87-57FE-4750-9D10-6E923374C486}
+		{8282DD38-1E30-4D5D-BC01-155DE8AE0B39} = {B8A9EC87-57FE-4750-9D10-6E923374C486}
+		{61C4022F-E4BE-4E91-9F46-28EF3DCB1FC1} = {B8A9EC87-57FE-4750-9D10-6E923374C486}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAAA43FE-9B77-431E-8ACE-8EC913958F2B}
+	EndGlobalSection
+EndGlobal
