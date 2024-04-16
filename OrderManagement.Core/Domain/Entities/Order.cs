@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OrderManagement.Core.Domain.Entities;
 
@@ -14,7 +15,8 @@ public class Order
     [Required]
     public DateTime OrderDate { get; set; }
     [Range(minimum: 0, maximum: double.MaxValue)]
-    public decimal TotalAmount { get; set; }
-    public List<OrderItem>? OrderItems { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public double TotalAmount { get; set; }
+    public List<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();
 
 }

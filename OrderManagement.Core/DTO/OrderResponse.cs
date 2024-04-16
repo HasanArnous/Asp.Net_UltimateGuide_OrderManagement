@@ -8,7 +8,7 @@ public class OrderResponse
     public string? OrderNumber { get; set; }
     public string? CustomerName { get; set; }
     public DateTime OrderDate { get; set; }
-    public decimal TotalAmount { get; set; }
+    public double TotalAmount { get; set; }
     public List<OrderItemResponse> OrderItems { get; set; }
 }
 
@@ -23,7 +23,7 @@ public static class OrderExtensions
             CustomerName = order.CustomerName,
             OrderDate = order.OrderDate,
             TotalAmount = order.TotalAmount,
-            OrderItems = order.OrderItems.Select(oi => oi.)
+            OrderItems = order.OrderItems?.Select(oi => oi.ToOrderItemResponse()).ToList()
         };
     }
 }

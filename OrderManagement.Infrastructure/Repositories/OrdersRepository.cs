@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderManagement.Core.Domain.Entities;
 using OrderManagement.Infrastructure.DataStore;
 using OrderManagement.Core.Domain.RepositoryContracts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace OrderManagement.Infrastructure.Repositories;
 
@@ -19,9 +20,12 @@ public class OrdersRepository : IOrdersRepository
 
     public async Task<Order> CreateAsync(Order order)
     {
-        var seq = _db.Orders.Max(o => o.SequentialNumber) + 1;
+        var seq = _db.Orders.IsNullOrEmpty() ? 0 : _db.Orders.Max(o => o.SequentialNumber);
+        seq++;
         order.OrderId = Guid.NewGuid();
         order.OrderDate = DateTime.Now;
+        order.SequentialNumber = seq;
+        order.OrderNumber = $"ORD/{DateTime.Now.Year}/{seq}";
         _db.Orders.Add(order);
         await _db.SaveChangesAsync();
         _logger.LogInformation($"New Order is Added ID: {order.OrderId}");
@@ -69,6 +73,7 @@ public class OrdersRepository : IOrdersRepository
         existOrder.OrderNumber = order.OrderNumber;
         existOrder.TotalAmount = order.TotalAmount;
         existOrder.CustomerName = order.CustomerName;
+        existOrder.OrderDate = order.OrderDate;
         await _db.SaveChangesAsync();
         _logger.LogInformation($"Updated an Order, ID: {order.OrderId}");
         return existOrder;

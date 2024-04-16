@@ -17,7 +17,8 @@ namespace OrderManagement.Core.Domain.Entities
         [Range(minimum:1, maximum:int.MaxValue)]
         public int Quantity { get; set; }
         [Range(minimum: 0, maximum: double.MaxValue)]
-        public decimal UnitPrice { get; set; }
-        public decimal TotalPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public double UnitPrice { get; set; }
+        public double TotalPrice { get; set; }
     }
 }

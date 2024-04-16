@@ -13,7 +13,7 @@ public class OrderItemAddRequest
     [Range(minimum: 1, maximum: int.MaxValue)]
     public int Quantity { get; set; }
     [Range(minimum: 0, maximum: double.MaxValue)]
-    public decimal UnitPrice { get; set; }
+    public double UnitPrice { get; set; }
 }
 
 public static class OrderItemAddRequestExtensions

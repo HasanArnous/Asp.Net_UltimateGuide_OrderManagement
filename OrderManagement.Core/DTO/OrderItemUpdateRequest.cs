@@ -16,5 +16,21 @@ public class OrderItemUpdateRequest
     [Range(minimum: 1, maximum: int.MaxValue)]
     public int Quantity { get; set; }
     [Range(minimum: 0, maximum: double.MaxValue)]
-    public decimal UnitPrice { get; set; }
+    public double UnitPrice { get; set; }
+}
+
+public static class OrderItemUpdateRequestExtensions
+{
+    public static OrderItem ToOrderItem(this OrderItemUpdateRequest orderItemUpdateRequest)
+    {
+        return new OrderItem
+        {
+            OrderId = orderItemUpdateRequest.OrderId,
+            OrderItemId = orderItemUpdateRequest.OrderItemId,
+            ProductName = orderItemUpdateRequest.ProductName,
+            Quantity = orderItemUpdateRequest.Quantity,
+            UnitPrice = orderItemUpdateRequest.UnitPrice,
+            TotalPrice = orderItemUpdateRequest.Quantity * orderItemUpdateRequest.UnitPrice
+        };
+    }
 }

@@ -29,5 +29,4 @@ public static class OrderUpdateRequestExtensions
             TotalAmount = orderUpdateRequest.OrderItems.Sum(oi => oi.Quantity * oi.UnitPrice)
         };
     }
-    public static 
 }

@@ -1,17 +1,17 @@
-﻿using Microsoft.Extensions.Logging;
-using OrderManagement.Core.Domain.RepositoryContracts;
+﻿using OrderManagement.Core.Domain.RepositoryContracts;
+using OrderManagement.Core.ServiceContracts.Orders;
+using Microsoft.Extensions.Logging;
 using OrderManagement.Core.DTO;
-using OrderManagement.Core.ServiceContracts.Order;
 
 namespace OrderManagement.Core.Services.Orders;
 
-public class OrderAdderService : IOrdersAdderService
+public class OrdersAdderService : IOrdersAdderService
 {
     private readonly IOrdersRepository _ordersRepository;
     private readonly IOrderItemsRepository _orderItemsRepository;
-    private readonly ILogger<OrderAdderService> _logger;
+    private readonly ILogger<OrdersAdderService> _logger;
 
-    public OrderAdderService(IOrdersRepository ordersRepository, IOrderItemsRepository orderItemsRepository, ILogger<OrderAdderService> logger)
+    public OrdersAdderService(IOrdersRepository ordersRepository, IOrderItemsRepository orderItemsRepository, ILogger<OrdersAdderService> logger)
     {
         _ordersRepository = ordersRepository;
         _orderItemsRepository = orderItemsRepository;

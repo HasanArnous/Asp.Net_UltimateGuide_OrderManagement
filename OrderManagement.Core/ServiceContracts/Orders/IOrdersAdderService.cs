@@ -1,6 +1,6 @@
 ﻿using OrderManagement.Core.DTO;
 
-namespace OrderManagement.Core.ServiceContracts.Order;
+namespace OrderManagement.Core.ServiceContracts.Orders;
 
 public interface IOrdersAdderService
 {

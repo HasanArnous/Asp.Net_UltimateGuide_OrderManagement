@@ -5,12 +5,12 @@ using OrderManagement.Core.DTO;
 
 namespace OrderManagement.Core.Services.Orders;
 
-public class OrderUpdaterService : IOrdersUpdaterService
+public class OrdersUpdaterService : IOrdersUpdaterService
 {
     private readonly IOrdersRepository _ordersRepository;
-    private readonly ILogger<OrderUpdaterService> _logger;
+    private readonly ILogger<OrdersUpdaterService> _logger;
 
-    public OrderUpdaterService(IOrdersRepository ordersRepository, ILogger<OrderUpdaterService> logger)
+    public OrdersUpdaterService(IOrdersRepository ordersRepository, ILogger<OrdersUpdaterService> logger)
     {
         _ordersRepository = ordersRepository;
         _logger = logger;

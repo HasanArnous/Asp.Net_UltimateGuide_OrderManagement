@@ -8,6 +8,6 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions options) : base(options) {}
     public AppDbContext() {}
 
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
+    public virtual DbSet<Order> Orders { get; set; }
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
 }
