@@ -27,8 +27,11 @@ public class OrderItemsGetterService : IOrderItemsGetterService
             .ToList();
     }
 
-    public async Task<OrderItemResponse> GetAsyncByOrderItemId(Guid orderItemId)
+    public async Task<OrderItemResponse?> GetAsyncByOrderItemId(Guid orderItemId)
     {
-        return (await _orderItemsRepository.GetAsyncById(orderItemId)).ToOrderItemResponse();
+        var orderItem = await _orderItemsRepository.GetAsyncById(orderItemId);
+        if(orderItem != null)
+            return orderItem.ToOrderItemResponse();
+        return null;
     }
 }

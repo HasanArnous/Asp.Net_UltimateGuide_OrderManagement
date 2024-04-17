@@ -24,4 +24,15 @@ public static class OrderAddRequestExtensions
             OrderItems = orderAddRequest.OrderItems.Select(oi => oi.ToOrderItem()).ToList(),
         };
     }
+    public static OrderAddRequest ToOrderAddRequest(this Order order)
+    {
+        return new OrderAddRequest
+        {
+            CustomerName = order.CustomerName,
+            OrderDate = order.OrderDate,
+            OrderItems = order.OrderItems != null 
+                ? order.OrderItems.Select(oi => oi.ToOrderItemAddRequest()).ToList() 
+                : new List<OrderItemAddRequest>(),
+        };
+    }
 }

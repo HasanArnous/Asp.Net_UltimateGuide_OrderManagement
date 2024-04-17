@@ -45,7 +45,7 @@ public class OrderItemsRepository : IOrderItemsRepository
         return await _db.OrderItems.ToListAsync();
     }
 
-    public async Task<OrderItem> GetAsyncById(Guid orderItemId)
+    public async Task<OrderItem?> GetAsyncById(Guid orderItemId)
     {
         var orderItem = await _db.OrderItems.FindAsync(orderItemId);
         if (orderItem == null)
@@ -75,7 +75,7 @@ public class OrderItemsRepository : IOrderItemsRepository
         if (existedItem == null)
         {
             _logger.LogWarning($"Trying to Update a not found Order Item, ID: {orderItem.OrderItemId}");
-            return orderItem;
+            return null;
         }
         existedItem.UnitPrice = orderItem.UnitPrice;
         existedItem.Quantity = orderItem.Quantity;

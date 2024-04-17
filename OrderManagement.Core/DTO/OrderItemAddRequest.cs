@@ -29,4 +29,15 @@ public static class OrderItemAddRequestExtensions
             TotalPrice = orderItemAddRequest.Quantity * orderItemAddRequest.UnitPrice
         };
     }
+
+    public static OrderItemAddRequest ToOrderItemAddRequest(this OrderItem oi)
+    {
+        return new OrderItemAddRequest
+        {
+            OrderId = oi.OrderId,
+            ProductName = oi.ProductName,
+            Quantity = oi.Quantity,
+            UnitPrice = oi.UnitPrice,
+        };
+    }
 }

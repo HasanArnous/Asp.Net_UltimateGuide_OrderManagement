@@ -29,4 +29,17 @@ public static class OrderUpdateRequestExtensions
             TotalAmount = orderUpdateRequest.OrderItems.Sum(oi => oi.Quantity * oi.UnitPrice)
         };
     }
+    public static OrderUpdateRequest ToOrderUpdateRequest(this Order order)
+    {
+        return new OrderUpdateRequest
+        {
+            CustomerName = order.CustomerName,
+            OrderDate = order.OrderDate,
+            OrderId = order.OrderId,
+            OrderItems = order.OrderItems != null
+                ? order.OrderItems.Select(oi => oi.ToOrderItemUpdateRequest()).ToList()
+                : new List<OrderItemUpdateRequest>(),
+            OrderNumber = order.OrderNumber,
+        };
+    }
 }

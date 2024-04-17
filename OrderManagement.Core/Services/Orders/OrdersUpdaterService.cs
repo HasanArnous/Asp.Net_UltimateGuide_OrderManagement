@@ -20,7 +20,12 @@ public class OrdersUpdaterService : IOrdersUpdaterService
     {
         var order = orderUpdateRequest.ToOrder();
         var updatedOrder = await _ordersRepository.UpdateAsync(order);
-        _logger.LogInformation($"Order Updated, ID: {updatedOrder.OrderId}");
-        return updatedOrder.ToOrderResponse();
+        if(updatedOrder != null)
+        {
+            _logger.LogInformation($"Order Updated, ID: {updatedOrder.OrderId}");
+            return updatedOrder.ToOrderResponse();
+        }
+        _logger.LogWarning($"Order Not Updated, The Order Not Found, ID: {orderUpdateRequest.OrderId}");
+        return null;
     }
 }

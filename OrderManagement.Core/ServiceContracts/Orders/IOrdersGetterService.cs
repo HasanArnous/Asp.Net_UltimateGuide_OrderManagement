@@ -4,6 +4,6 @@ namespace OrderManagement.Core.ServiceContracts.Orders;
 
 public interface IOrdersGetterService
 {
-    Task<OrderResponse> GetAsync(Guid orderId);
+    Task<OrderResponse?> GetAsync(Guid orderId);
     Task<List<OrderResponse>> GetAllAsync();
 }

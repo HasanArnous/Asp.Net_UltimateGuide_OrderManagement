@@ -60,12 +60,17 @@ public class OrdersController : CustomControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<OrderResponse>> PutOrder(Guid orderId, OrderUpdateRequest orderAddRequest)
     {
-        if(orderId != orderAddRequest.OrderId)
+        if (orderId != orderAddRequest.OrderId)
         {
             _logger.LogWarning($"PutOrder - Failed - No Match Between the Supplied OrderId({orderId}) in the route and the OrderId in the Request Body({orderAddRequest.OrderId})");
             return BadRequest();
         }
         var result = await _ordersUpdaterService.UpdateAsync(orderAddRequest);
+        if (result == null)
+        {
+            _logger.LogWarning($"PutOrder - Failed - Order Not Found, OrderId: {orderId}");
+            return BadRequest();
+        }
         _logger.LogInformation($"PutOrder - Success - ID: {orderId}");
         return Ok(result);
     }

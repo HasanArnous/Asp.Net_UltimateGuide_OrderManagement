@@ -20,7 +20,7 @@ public class OrdersRepository : IOrdersRepository
 
     public async Task<Order> CreateAsync(Order order)
     {
-        var seq = _db.Orders.IsNullOrEmpty() ? 0 : _db.Orders.Max(o => o.SequentialNumber);
+        var seq = _db.Orders.IsNullOrEmpty() ? 0 : await _db.Orders.MaxAsync(o => o.SequentialNumber);
         seq++;
         order.OrderId = Guid.NewGuid();
         order.OrderDate = DateTime.Now;
@@ -51,7 +51,7 @@ public class OrdersRepository : IOrdersRepository
         return await _db.Orders.OrderByDescending(o => o.OrderDate).ToListAsync();
     }
 
-    public async Task<Order> GetAsync(Guid orderId)
+    public async Task<Order?> GetAsync(Guid orderId)
     {
         var order = await _db.Orders.FindAsync(orderId);
         if (order == null)
@@ -61,13 +61,13 @@ public class OrdersRepository : IOrdersRepository
         return order;    
     }
 
-    public async Task<Order> UpdateAsync(Order order)
+    public async Task<Order?> UpdateAsync(Order order)
     {
         var existOrder = await _db.Orders.FindAsync(order.OrderId);
         if (existOrder == null)
         {
             _logger.LogWarning($"Trying to Update a not found Order, ID: {order.OrderId}");
-            return order;
+            return null;
         }
         existOrder.SequentialNumber = order.SequentialNumber;
         existOrder.OrderNumber = order.OrderNumber;

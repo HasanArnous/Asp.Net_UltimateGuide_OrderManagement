@@ -4,7 +4,6 @@ using OrderManagement.Infrastructure.DataStore;
 using OrderManagement.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using EntityFrameworkCoreMock;
 using FluentAssertions;
 using AutoFixture;
 using Moq;
@@ -14,18 +13,12 @@ namespace OrderManagement.Test.Repositories;
 public class UnitTest_OrdersRepository
 {
     private readonly AppDbContext _db;
-    private readonly DbContextMock<AppDbContext> _dbMock;
     private readonly IOrdersRepository _ordersRepository;
     private readonly IFixture _fixture;
 
-    private readonly DbSetMock<Order> _ordersMock;
-    private readonly DbSetMock<OrderItem> _orderItemsMock;
     public UnitTest_OrdersRepository()
     {
-        _dbMock = new DbContextMock<AppDbContext>(new DbContextOptionsBuilder<AppDbContext>().Options);
-        _ordersMock = _dbMock.CreateDbSetMock(db => db.Orders, new List<Order>());
-        _orderItemsMock = _dbMock.CreateDbSetMock(db => db.OrderItems, new List<OrderItem>());
-        _db = _dbMock.Object;
+        _db = new AppDbContext(new DbContextOptionsBuilder().UseInMemoryDatabase("OrderManagement_Repositories_Test_DB").Options);
         _ordersRepository = new OrdersRepository(_db, new Mock<ILogger<OrdersRepository>>().Object);
         _fixture = new Fixture();
     }
@@ -34,6 +27,7 @@ public class UnitTest_OrdersRepository
     [Fact]
     public async Task Create_Success()
     {
+        // Arrange
         var order = _fixture.Build<Order>()
             .Without(o => o.SequentialNumber)
             .Without(o => o.OrderNumber)
@@ -41,35 +35,37 @@ public class UnitTest_OrdersRepository
             .Without(o => o.OrderDate)
             .Without(o => o.OrderId)
             .Create();
+
+        // Act
         var createdOrder = await _ordersRepository.CreateAsync(order);
+        var max = await _db.Orders.MaxAsync(o => o.SequentialNumber);
+
+        // Assert
         createdOrder.Should().NotBeNull();
         createdOrder.OrderId.Should().NotBeEmpty();
-        createdOrder.SequentialNumber.Should().Be(1);
+        createdOrder.SequentialNumber.Should().Be(max);
         createdOrder.OrderNumber.Should().NotBeNullOrEmpty();
     }
 
     #endregion
 
     #region Getters
-    [Fact]
-    public async Task Get_All_EmptyList()
-    {
-        var orders = await _ordersRepository.GetAllAsync();
-        orders.Should().BeEmpty();
-    }
 
     [Fact]
     public async Task Get_All_List_Success()
     {
-        // Arrange=
-        for(int i=0; i<4; i++)
-            _ordersMock.Object.Add(_fixture.Build<Order>().Without(o => o.OrderItems).Create());
-        
+        // Arrange
+        var expected = new List<Order>();
+        for (int i = 0; i < 4; i++)
+            expected.Add(_fixture.Build<Order>().Without(o => o.OrderItems).Create());
+        _db.Orders.AddRange(expected);
+        await _db.SaveChangesAsync();
+
         // Act
         var result = await _ordersRepository.GetAllAsync();
 
         // Assert
-        result.Should().BeEquivalentTo(_ordersMock.Object);
+        result.Should().Contain(expected);
     }
 
     [Fact]
@@ -77,15 +73,17 @@ public class UnitTest_OrdersRepository
     {
         // Arrange
         var order = _fixture.Build<Order>().Without(o => o.OrderItems).Create();
-        _ordersMock.Object.Add(order);
+        _db.Orders.Add(order);
         for (int i = 0; i < 4; i++)
-            _ordersMock.Object.Add(_fixture.Build<Order>().Without(o => o.OrderItems).Create());
+            _db.Orders.Add(_fixture.Build<Order>().Without(o => o.OrderItems).Create());
+        await _db.SaveChangesAsync();
 
         // Act
         var existed = await _ordersRepository.GetAsync(order.OrderId);
 
         // Assert
-        existed.Should().BeEquivalentTo(existed);
+        existed.Should().NotBeNull();
+        existed.Should().BeEquivalentTo(order);
     }
 
     [Fact]
@@ -93,7 +91,9 @@ public class UnitTest_OrdersRepository
     {
         // Arrange
         for (int i = 0; i < 4; i++)
-            _ordersMock.Object.Add(_fixture.Build<Order>().Without(o => o.OrderItems).Create());
+            _db.Orders.Add(_fixture.Build<Order>().Without(o => o.OrderItems).Create());
+        await _db.SaveChangesAsync();
+
 
         // Act 
         var notExisted = await _ordersRepository.GetAsync(Guid.NewGuid());
@@ -109,15 +109,16 @@ public class UnitTest_OrdersRepository
     {
         // Arrange
         var order = _fixture.Build<Order>().Without(o => o.OrderItems).Create();
-        var updateOrder = _fixture.Build<Order>().Without(o => o.OrderItems).Create();
+        _db.Orders.Add(order);
+        await _db.SaveChangesAsync();
 
-        _ordersMock.Setup(o => o.FindAsync(It.IsAny<Guid>())).ReturnsAsync(null as Order);
+        var updateOrder = _fixture.Build<Order>().Without(o => o.OrderItems).Create();
 
         // Act
         var updatedOrder = await _ordersRepository.UpdateAsync(updateOrder);
 
         // Assert
-        order.OrderId.Should().NotBe(updatedOrder.OrderId);
+        updatedOrder.Should().BeNull();
     }
 
     [Fact]
@@ -125,11 +126,13 @@ public class UnitTest_OrdersRepository
     {
         // Arrange
         var order = _fixture.Build<Order>().Without(o => o.OrderItems).Create();
+        _db.Orders.Add(order);
+        await _db.SaveChangesAsync();
+
         var updateOrder = _fixture.Build<Order>()
             .Without(o => o.OrderItems)
             .With(o => o.OrderId, order.OrderId)
             .Create();
-        _ordersMock.Setup(o => o.FindAsync(It.IsAny<Guid>())).ReturnsAsync(order);
 
         // Act
         var updatedOrder = await _ordersRepository.UpdateAsync(updateOrder);
@@ -143,9 +146,6 @@ public class UnitTest_OrdersRepository
     [Fact]
     public async Task Delete_NotFound()
     {
-        // Arrange
-        _ordersMock.Setup(o => o.FindAsync(It.IsAny<Guid>())).ReturnsAsync(null as Order);
-
         // Act
         var deleteResult = await _ordersRepository.DeleteAsync(Guid.NewGuid());
 
@@ -158,7 +158,8 @@ public class UnitTest_OrdersRepository
     {
         // Arrange
         var order = _fixture.Build<Order>().Without(o => o.OrderItems).Create();
-        _ordersMock.Setup(o => o.FindAsync(It.IsAny<Guid>())).ReturnsAsync(order);
+        _db.Orders.Add(order);
+        await _db.SaveChangesAsync();
 
         // Act
         var deleteResult = await _ordersRepository.DeleteAsync(order.OrderId);

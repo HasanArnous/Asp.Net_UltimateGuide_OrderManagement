@@ -33,4 +33,15 @@ public static class OrderItemUpdateRequestExtensions
             TotalPrice = orderItemUpdateRequest.Quantity * orderItemUpdateRequest.UnitPrice
         };
     }
+    public static OrderItemUpdateRequest ToOrderItemUpdateRequest(this OrderItem orderItem)
+    {
+        return new OrderItemUpdateRequest
+        {
+            OrderId = orderItem.OrderId,
+            OrderItemId = orderItem.OrderItemId,
+            ProductName = orderItem.ProductName,
+            Quantity = orderItem.Quantity,
+            UnitPrice = orderItem.UnitPrice,
+        };
+    }
 }

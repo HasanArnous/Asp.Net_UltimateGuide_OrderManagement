@@ -18,8 +18,11 @@ public class OrdersGetterService : IOrdersGetterService
         return (await _ordersRepository.GetAllAsync()).Select(o => o.ToOrderResponse()).ToList();
     }
 
-    public async Task<OrderResponse> GetAsync(Guid orderId)
+    public async Task<OrderResponse?> GetAsync(Guid orderId)
     {
-        return (await _ordersRepository.GetAsync(orderId)).ToOrderResponse();
+        var order = await _ordersRepository.GetAsync(orderId);
+        if (order == null)
+            return null;
+        return order.ToOrderResponse();
     }
 }

@@ -74,6 +74,11 @@ public class OrderItemsController : ControllerBase
             return BadRequest();
         }
         var updatedItem = await _orderItemsUpdaterService.UpdateAsync(orderItemUpdateRequest);
+        if(updatedItem == null)
+        {
+            _logger.LogWarning($"PutOrderItem - Failed - Order Item Not Found, Order ID: {orderId}, Order Item Id: {id}");
+            return BadRequest();
+        }
         _logger.LogInformation($"PutOrderItem - Success - OrderId: {orderId}, OrderItemId: {id}");
         return updatedItem;
     }
