@@ -31,7 +31,7 @@ public class OrderItemsController : ControllerBase
     [ProducesResponseType<ActionResult<List<OrderItemResponse>>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<OrderItemResponse>>> GetOrderItems(Guid orderId)
     {
-        return await _orderItemsGetterService.GetAsyncByOrderId(orderId);
+        return Ok(await _orderItemsGetterService.GetAsyncByOrderId(orderId));
     }
 
     [HttpGet("{id}")]
@@ -45,7 +45,7 @@ public class OrderItemsController : ControllerBase
             _logger.LogWarning($"GetOrderItem - Failed (Not Found) - Order ID: {orderId}, Order Item ID: {id}");
             return NotFound();
         }
-        return orderItem;
+        return Ok(orderItem);
     }
 
     [HttpPost]
@@ -80,13 +80,13 @@ public class OrderItemsController : ControllerBase
             return BadRequest();
         }
         _logger.LogInformation($"PutOrderItem - Success - OrderId: {orderId}, OrderItemId: {id}");
-        return updatedItem;
+        return Ok(updatedItem);
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> DeleteOrderItem(Guid orderId, Guid id)
+    public async Task<ActionResult<bool>> DeleteOrderItem(Guid orderId, Guid id)
     {
         var result = await _orderItemsDeleterService.DeleteAsync(id);
         if (result)

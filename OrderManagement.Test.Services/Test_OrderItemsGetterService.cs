@@ -101,7 +101,7 @@ public class Test_OrderItemsGetterService
     }
 
     [Fact]
-    public async Task Get_ByOrderId_Founc_ShouldReturnListWithItems()
+    public async Task Get_ByOrderId_Found_ShouldReturnListWithItems()
     {
         // Arrange
         var orderItems = new List<OrderItem>();

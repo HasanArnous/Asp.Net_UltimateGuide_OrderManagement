@@ -29,7 +29,7 @@ public class OrdersController : CustomControllerBase
     [ProducesResponseType<ActionResult<List<OrderResponse>>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<OrderResponse>>> GetOrders()
     {
-        return await _ordersGetterService.GetAllAsync();
+        return Ok(await _ordersGetterService.GetAllAsync());
     }
 
     [HttpGet("{orderId}")]
@@ -43,7 +43,7 @@ public class OrdersController : CustomControllerBase
             _logger.LogWarning($"GetOrder - Not Found Order - ID: {orderId}");
             return NotFound();
         }
-        return orderResponse;
+        return Ok(orderResponse);
     }
 
     [HttpPost]
@@ -78,7 +78,7 @@ public class OrdersController : CustomControllerBase
     [HttpDelete("{orderId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> DeleteOrder(Guid orderId)
+    public async Task<ActionResult<bool>> DeleteOrder(Guid orderId)
     {
         var result = await _ordersDeleterService.DeleteAsync(orderId);
         if (result)
